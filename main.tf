@@ -91,6 +91,26 @@ resource "aws_elasticache_replication_group" "default" {
 
   # A mapping of tags to assign to the resource.
   tags = merge({ "Name" = var.name }, var.tags)
+
+  dynamic "log_delivery_configuration" {
+    for_each = var.enable_redis_slow_log && var.cloudwatch_log_group != "" ? ["this"] : []
+    content {
+      destination      = var.cloudwatch_log_group
+      destination_type = "cloudwatch-logs"
+      log_format       = "json"
+      log_type         = "slow-log"
+    }
+  }
+
+  dynamic "log_delivery_configuration" {
+    for_each = var.enable_redis_engine_log && var.cloudwatch_log_group != "" ? ["this"] : []
+    content {
+      destination      = var.cloudwatch_log_group
+      destination_type = "cloudwatch-logs"
+      log_format       = "json"
+      log_type         = "engine-log"
+    }
+  }
 }
 
 # https://www.terraform.io/docs/providers/aws/r/elasticache_parameter_group.html

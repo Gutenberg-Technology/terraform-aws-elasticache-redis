@@ -99,3 +99,23 @@ variable "tags" {
   type        = map(string)
   description = "A mapping of tags to assign to all resources."
 }
+
+# Log Vars
+
+variable "enable_redis_slow_log" {
+  type        = bool
+  description = "Enable Redis slow log."
+  default     = false
+}
+
+variable "enable_redis_engine_log" {
+  type        = bool
+  description = "Enable Redis engine log."
+  default     = false
+}
+
+variable "cloudwatch_log_group" {
+  type        = string
+  description = "The name of the CloudWatch log group to which slow logs will be published."
+  default     = ""
+}
